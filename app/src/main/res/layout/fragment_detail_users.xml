@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".ui.users.DetailUsersFragment">
+
+    <ImageView
+        android:id="@+id/iv_Avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/user1"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_Name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="start"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/iv_Avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_Avatar"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/tv_Username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/iv_Avatar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_Avatar"
+        tools:text="Username" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/repository"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/tv_Repo"
+        app:layout_constraintEnd_toEndOf="@+id/tv_Repo"
+        app:layout_constraintStart_toStartOf="@+id/tv_Repo" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/followers"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/tv_Follower"
+        app:layout_constraintEnd_toEndOf="@+id/tv_Follower"
+        app:layout_constraintStart_toEndOf="@+id/tv_Repo" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/following"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/tv_Following"
+        app:layout_constraintEnd_toEndOf="@+id/tv_Following"
+        app:layout_constraintStart_toEndOf="@+id/tv_Follower" />
+
+    <TextView
+        android:id="@+id/tv_Repo"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_Follower"
+        app:layout_constraintEnd_toStartOf="@+id/tv_Follower"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/tv_Name"
+        app:layout_constraintTop_toTopOf="@+id/tv_Follower"
+        tools:text="102" />
+
+    <TextView
+        android:id="@+id/tv_Follower"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_Following"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_Repo"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Name"
+        tools:text="56995" />
+
+    <TextView
+        android:id="@+id/tv_Following"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_Follower"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_Follower"
+        app:layout_constraintTop_toTopOf="@+id/tv_Follower"
+        tools:text="12" />
+
+    <TextView
+        android:id="@+id/tv_Company"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/tv_Name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Follower"
+        tools:text="Google, Inc." />
+
+    <TextView
+        android:id="@+id/tv_Location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/iv_Avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Username"
+        tools:text="New Delhi, India" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
