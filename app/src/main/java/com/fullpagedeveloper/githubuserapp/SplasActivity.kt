@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.fullpagedeveloper.githubuserapp.ui.users.UsersActivity
+import com.fullpagedeveloper.githubuserapp.ui.search.UsersActivity
 import kotlinx.android.synthetic.main.activity_splas.*
 
 class SplasActivity : AppCompatActivity() {

@@ -1,6 +1,7 @@
 package com.fullpagedeveloper.githubuserapp.data
+import com.fullpagedeveloper.githubuserapp.data.model.Item
 import com.fullpagedeveloper.githubuserapp.data.model.User
-import com.fullpagedeveloper.githubuserapp.data.model.UsersList
+import com.fullpagedeveloper.githubuserapp.data.model.Users
 import com.fullpagedeveloper.githubuserapp.data.request.ApiRequest
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -21,15 +22,15 @@ class ServiceGenerator {
         .build()
         .create(ApiRequest::class.java)
 
-    fun getApiRequestSearch(q: String, sort: String, order: String): Call<User> {
-        return retrofitBuilder.getSearch(q, sort, order)
+    fun getApiRequestSearch(token: String, q: String, sort: String, order: String): Call<User> {
+        return retrofitBuilder.getSearch(token, q, sort, order)
     }
 
-    fun getApiRequestUsersLis(): Call<List<UsersList>>{
+    fun getApiRequestUsersLis(): Call<ArrayList<Item>>{
         return retrofitBuilder.getDataListUsers()
     }
 
-    fun getUserDetailByUsername(username: String, auth: String): Call<User> {
-        return retrofitBuilder.findUserDetailByUsername(username, auth)
+    fun getDetail(auth: String, username: String): Call<Users> {
+        return retrofitBuilder.getDetail(auth, username)
     }
 }

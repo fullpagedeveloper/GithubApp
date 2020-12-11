@@ -114,6 +114,9 @@
     <string name="search">Search</string>
     <string name="search_all_users">Search all users</string>
     <string name="retry">Retry</string>
+    <string name="users">Users</string>
+    <string name="detail_user">Detail User</string>
+    <string name="followed_by">Followed by:</string>
 
 </resources>
 

@@ -3,6 +3,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class User(
     @SerializedName("incomplete_results")
     val incompleteResults: Boolean,
@@ -10,8 +11,9 @@ data class User(
     val items: List<Item>,
     @SerializedName("total_count")
     val totalCount: Int
-)
+): Parcelable
 
+@Parcelize
 data class Item(
     @SerializedName("avatar_url")
     val avatarUrl: String,
@@ -51,4 +53,4 @@ data class Item(
     val type: String,
     @SerializedName("url")
     val url: String
-)
+): Parcelable

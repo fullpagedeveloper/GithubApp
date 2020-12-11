@@ -1,17 +1,15 @@
-package com.fullpagedeveloper.githubuserapp.ui.users
+package com.fullpagedeveloper.githubuserapp.ui.search
 
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fullpagedeveloper.githubuserapp.R
@@ -21,56 +19,68 @@ import kotlinx.android.synthetic.main.activity_users.*
 
 class UsersActivity : AppCompatActivity() {
 
-    var viewModel = UsersSearchViewModel()
-    //private val usersAdapter = SearchAdapter()
-    private val userLisAdapter = UsersListAdapter()
+    private lateinit var usersSearchViewModel : UsersSearchViewModel
+    private val searchAdapter = SearchAdapter{click -> doClick(click)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
 
-        usersListView()
+        supportActionBar?.title = getString(R.string.users)
 
-        supportActionBar?.title = ("Users")
-
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UsersSearchViewModel::class.java]
+        usersSearchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UsersSearchViewModel::class.java]
 
         recyclerView_User.apply {
             layoutManager = LinearLayoutManager(context)
-           // adapter = usersAdapter
-            adapter = userLisAdapter
+            adapter = searchAdapter
         }
-    }
 
-    private fun usersListView() {
-        recyclerView_User.visibility = View.VISIBLE
-        Handler(Looper.getMainLooper()).removeCallbacksAndMessages(null)
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.getUsersList().observe(this, { usersListView ->
-                for (users in usersListView) {
-                    viewModel.getSearchList(users.login).observe(this, Observer {
-                        userLisAdapter.setDataUsersList(ArrayList(usersListView))
+        listUsers()
 
-                    })
-                }
-            })
-        },300)
+        loadAndError()
     }
 
     private fun doClick(itemList: Item) {
         supportFragmentManager.beginTransaction().apply {
-            //val fragment = DetailUsersFragment.newInstance(itemList)
-            // replace(R.id.framRoot, fragment)
+            val usersFragment = DetailUsersFragment.newInstance(itemList)
+            replace(R.id.framRoot, usersFragment)
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             addToBackStack(null)
             commit()
         }
     }
 
+    private fun loadAndError() {
+        usersSearchViewModel.error.observe(this@UsersActivity, { isError ->
+            isError?.let {
+                textView_Message.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        })
+
+        usersSearchViewModel.loading.observe(this@UsersActivity, { isLoading ->
+            isLoading?.let {
+                progress_bar.visibility = if (it) View.VISIBLE else View.GONE
+
+                if (it) {
+                    textView_Message.visibility = View.GONE
+                    recyclerView_User.visibility = View.GONE
+                }
+            }
+        })
+    }
+
+    private fun listUsers() {
+        usersSearchViewModel.listUser().observe(this, {
+            recyclerView_User.visibility = View.VISIBLE
+            searchAdapter.setDataSearchView(ArrayList(it))
+
+        })
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         supportFragmentManager.popBackStack()
-        supportActionBar?.title = ("Users")
+        supportActionBar?.title = getString(R.string.users)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,15 +93,10 @@ class UsersActivity : AppCompatActivity() {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = resources.getString(R.string.search_all_users)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("GOKIL", "onQueryTextSubmit: $query")
-                return false
-            }
+            override fun onQueryTextSubmit(query: String?): Boolean { return false }
 
             override fun onQueryTextChange(query: String): Boolean {
-                if (query.isEmpty()) {
-                } else {
-                    Log.d("GOKIL", "onQueryTextChange: ----> $query")
+                if(query != ""){
                     searchListUsersView(query)
                 }
                 return false
@@ -101,13 +106,18 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun searchListUsersView(newText: String) {
-        recyclerView_User.visibility = View.VISIBLE
         Handler(Looper.getMainLooper()).removeCallbacksAndMessages(null)
         Handler(Looper.getMainLooper()).postDelayed({
-//            viewModel.getSearchList(newText).observe(this@UsersActivity, Observer {
-//                usersAdapter.setDataSearchView(ArrayList(it))
-//                usersAdapter.filter.filter(newText)
-//            })
+            usersSearchViewModel.getSearchList(newText).observe(this@UsersActivity, {
+                if (it.isEmpty()) {
+                    textView_Message.visibility = View.VISIBLE
+                    progress_bar.visibility = View.GONE
+                } else {
+                    recyclerView_User.visibility = View.VISIBLE
+                    searchAdapter.setDataSearchView(ArrayList(it))
+                    searchAdapter.filter.filter(newText)
+                }
+            })
         }, 300)
     }
 }
