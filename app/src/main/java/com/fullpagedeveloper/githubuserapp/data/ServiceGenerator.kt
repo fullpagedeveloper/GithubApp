@@ -1,4 +1,5 @@
 package com.fullpagedeveloper.githubuserapp.data
+import com.fullpagedeveloper.githubuserapp.data.model.Follow
 import com.fullpagedeveloper.githubuserapp.data.model.Item
 import com.fullpagedeveloper.githubuserapp.data.model.User
 import com.fullpagedeveloper.githubuserapp.data.model.Users
@@ -8,13 +9,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ServiceGenerator {
-
-    /**
-    Search : https://api.github.com/search/users?q={username}
-    Detail user : https://api.github.com/users/{username}
-    List Follower : https://api.github.com/users/{username}/followers
-    List Following : https://api.github.com/users/{username}/following
-    * */
 
     private val retrofitBuilder = Retrofit.Builder()
         .baseUrl(Constant.BASE_URL)
@@ -32,5 +26,13 @@ class ServiceGenerator {
 
     fun getDetail(auth: String, username: String): Call<Users> {
         return retrofitBuilder.getDetail(auth, username)
+    }
+
+    fun getFollowers(auth: String, username: String): Call<ArrayList<Follow>> {
+        return retrofitBuilder.getFollowers(auth, username)
+    }
+
+    fun getFollowing(auth: String, username: String): Call<ArrayList<Follow>> {
+        return retrofitBuilder.getFollowing(auth, username)
     }
 }

@@ -1,9 +1,8 @@
-package com.fullpagedeveloper.githubuserapp.ui.search
+package com.fullpagedeveloper.githubuserapp.ui.users.detail
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +10,6 @@ import com.fullpagedeveloper.githubuserapp.R
 import com.fullpagedeveloper.githubuserapp.data.model.Item
 import com.fullpagedeveloper.githubuserapp.extention.getProgresDrawable
 import com.fullpagedeveloper.githubuserapp.extention.loadImage
-import com.fullpagedeveloper.githubuserapp.ui.users.UsersViewModel
 import kotlinx.android.synthetic.main.fragment_detail_users.*
 import kotlinx.android.synthetic.main.fragment_detail_users.view.*
 import java.util.*
@@ -19,10 +17,11 @@ import java.util.*
 
 class DetailUsersFragment : Fragment() {
 
-    var usersViewModel = UsersViewModel()
+    private lateinit var usersViewModel: DetailUsersViewModel
+    private var users: String? = null
 
     companion object {
-        const val USERNAME = "username"
+        private const val USERNAME = "username_follow"
 
         fun newInstance(itemList: Item): DetailUsersFragment {
             return DetailUsersFragment().apply {
@@ -43,25 +42,46 @@ class DetailUsersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+
+        progress_bar.visibility = View.GONE
+
         (activity as AppCompatActivity?)!!.supportActionBar?.title = getString(R.string.detail_user)
+        usersViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailUsersViewModel::class.java]
 
-        usersViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[UsersViewModel::class.java]
+        users = arguments?.getString(USERNAME)
 
-        val users = arguments?.getString(USERNAME)
-
-        loadAndError()
+        val sectionPageAdapter = ViewPagerAdapter(
+            view.context,
+            users.toString(),
+            childFragmentManager
+        )
+        viewPager.adapter = sectionPageAdapter
+        tabLayout.setupWithViewPager(viewPager)
 
         dataDetail(users.toString(), view)
+        loadAndError()
 
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.removeItem(R.id.searchView)
     }
 
     private fun loadAndError() {
         usersViewModel.error.observe(viewLifecycleOwner, { isError ->
             isError.let {
                 text_error.visibility = if (it) View.VISIBLE else View.GONE
+
+                if (it) {
+                    group_item.visibility = View.GONE
+                }
+
+                if (it) {
+                    Toast.makeText(activity, getString(R.string.errorCode), Toast.LENGTH_SHORT).show()
+                }
             }
         })
 
@@ -71,6 +91,9 @@ class DetailUsersFragment : Fragment() {
 
                 if (it) {
                     text_error.visibility = View.GONE
+                } else {
+                    group_item.visibility = View.VISIBLE
+                    progress_bar.visibility = View.GONE
                 }
             }
 
@@ -88,8 +111,8 @@ class DetailUsersFragment : Fragment() {
             view.tv_Username.text = it.updatedAt
             view.tv_Location.text = it.location
             view.tv_Repo.text = it.publicRepos.toString()
-            view.tv_Follower.text = it.following.toString()
-            view.tv_Following.text = it.followers.toString()
+            view.tv_Follower.text = it.followers.toString()
+            view.tv_Following.text = it.following.toString()
         })
     }
 }

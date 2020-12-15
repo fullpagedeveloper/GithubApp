@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Github User App</string>
+    <string name="following">Mengikuti</string>
+    <string name="followers">Pengikut</string>
+    <string name="repository">Gudang</string>
+    <string name="search">Cari</string>
+    <string name="search_all_users">Cari semua pengguna</string>
+    <string name="users">Pengguna</string>
+    <string name="detail_user">Detail Pengguna</string>
+    <string name="error">Opppsss… Silahkan periksa jaringan kamu !!!</string>
+    <string name="errorCode">Opppsss… sepertinya sedang gangguan, silahkan coba lagi..</string>
+</resources>

@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.Menu
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentTransaction
@@ -14,31 +15,37 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fullpagedeveloper.githubuserapp.R
 import com.fullpagedeveloper.githubuserapp.data.model.Item
+import com.fullpagedeveloper.githubuserapp.ui.users.detail.DetailUsersFragment
 import kotlinx.android.synthetic.main.activity_users.*
 
 
 class UsersActivity : AppCompatActivity() {
 
     private lateinit var usersSearchViewModel : UsersSearchViewModel
-    private val searchAdapter = SearchAdapter{click -> doClick(click)}
+    private val searchAdapter = SearchAdapter{ click -> doClick(click)}
+    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
-
         supportActionBar?.title = getString(R.string.users)
 
         usersSearchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UsersSearchViewModel::class.java]
 
-        recyclerView_User.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = searchAdapter
-        }
+        showRecyclerView()
 
         listUsers()
 
         loadAndError()
     }
+
+    private fun showRecyclerView() {
+        recyclerView_User.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = searchAdapter
+        }
+    }
+
 
     private fun doClick(itemList: Item) {
         supportFragmentManager.beginTransaction().apply {
@@ -54,6 +61,10 @@ class UsersActivity : AppCompatActivity() {
         usersSearchViewModel.error.observe(this@UsersActivity, { isError ->
             isError?.let {
                 textView_Message.visibility = if (it) View.VISIBLE else View.GONE
+
+                if (it) {
+                    Toast.makeText(this@UsersActivity, getString(R.string.errorCode), Toast.LENGTH_SHORT).show()
+                }
             }
         })
 
@@ -88,15 +99,17 @@ class UsersActivity : AppCompatActivity() {
         inflate.inflate(R.menu.option_menu, menu)
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.searchView).actionView as SearchView
+        searchView = menu.findItem(R.id.searchView).actionView as SearchView
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = resources.getString(R.string.search_all_users)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean { return false }
+        searchView?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView?.queryHint = resources.getString(R.string.search_all_users)
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
 
             override fun onQueryTextChange(query: String): Boolean {
-                if(query != ""){
+                if (query != "") {
                     searchListUsersView(query)
                 }
                 return false
@@ -115,7 +128,6 @@ class UsersActivity : AppCompatActivity() {
                 } else {
                     recyclerView_User.visibility = View.VISIBLE
                     searchAdapter.setDataSearchView(ArrayList(it))
-                    searchAdapter.filter.filter(newText)
                 }
             })
         }, 300)
