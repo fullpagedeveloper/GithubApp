@@ -47,6 +47,7 @@ class FollowFragment : Fragment() {
             adapter = followAdapter
         }
 
+        lifeCycle()
         loadAndError(view)
     }
     private fun loadAndError(view: View) {
@@ -78,25 +79,26 @@ class FollowFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
+//    override fun onResume() {
+//        super.onResume()
+//
+//        lifeCycle()
+//    }
 
-        var username: String? = null
-        var page = 1
+    private fun lifeCycle() {
 
-        if (arguments != null) {
-            username = arguments?.getString(USERNAME)
-            page = arguments?.getInt(PAGE, 0) as Int
-        }
+        val username: String = arguments?.getString(USERNAME).toString()
+        val page = arguments?.getInt(PAGE, 0) as Int
+
 
         if (page == 1) {
-            followViewModel.getFollowers(username.toString()).observe(viewLifecycleOwner, {
+            followViewModel.getFollowers(username).observe(viewLifecycleOwner, {
                 followAdapter.setDataFollow(it)
             })
         }
 
         if (page == 2) {
-            followViewModel.getFollowing(username.toString()).observe(viewLifecycleOwner, {
+            followViewModel.getFollowing(username).observe(viewLifecycleOwner, {
                 followAdapter.setDataFollow(it)
             })
         }

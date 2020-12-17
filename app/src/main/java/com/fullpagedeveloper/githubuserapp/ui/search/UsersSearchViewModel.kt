@@ -1,5 +1,6 @@
 package com.fullpagedeveloper.githubuserapp.ui.search
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fullpagedeveloper.githubuserapp.data.Constant.Companion.AUTHKEY
@@ -22,7 +23,7 @@ class UsersSearchViewModel: ViewModel() {
     val error = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun getSearchList(username: String): MutableLiveData<List<Item>> {
+    fun getSearchList(username: String): LiveData<List<Item>> {
         loading.value = true
         serviceGenerator.getApiRequestSearch(AUTHKEY, username,repositories, order).enqueue(
             object : Callback<User> {
@@ -54,7 +55,7 @@ class UsersSearchViewModel: ViewModel() {
     }
 
 
-    fun listUser(): MutableLiveData<ArrayList<Item>> {
+    fun listUser(): LiveData<ArrayList<Item>> {
         loading.value = true
         serviceGenerator.getApiRequestUsersLis().enqueue(
             object : Callback<ArrayList<Item>> {

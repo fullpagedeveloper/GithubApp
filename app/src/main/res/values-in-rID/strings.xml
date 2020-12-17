@@ -10,4 +10,6 @@
     <string name="detail_user">Detail Pengguna</string>
     <string name="error">Opppsss… Silahkan periksa jaringan kamu !!!</string>
     <string name="errorCode">Opppsss… sepertinya sedang gangguan, silahkan coba lagi..</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
 </resources>

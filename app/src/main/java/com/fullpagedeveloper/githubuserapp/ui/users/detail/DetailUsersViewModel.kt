@@ -1,6 +1,5 @@
 package com.fullpagedeveloper.githubuserapp.ui.users.detail
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fullpagedeveloper.githubuserapp.data.Constant.Companion.AUTHKEY
@@ -9,7 +8,6 @@ import com.fullpagedeveloper.githubuserapp.data.model.Users
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 class DetailUsersViewModel : ViewModel() {
 
@@ -24,7 +22,6 @@ class DetailUsersViewModel : ViewModel() {
         serviceGenerator.getDetail(AUTHKEY, username).enqueue(
             object : Callback<Users> {
                 override fun onResponse(call: Call<Users>, response: Response<Users>) {
-                    Log.d("TEEEEEE", "${response.code()}")
                     if (response.isSuccessful) {
                         try {
                             users.value = response.body()

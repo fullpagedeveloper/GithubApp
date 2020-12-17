@@ -1,11 +1,9 @@
 package com.fullpagedeveloper.githubuserapp.ui.search
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Menu
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,20 +21,24 @@ class UsersActivity : AppCompatActivity() {
 
     private lateinit var usersSearchViewModel : UsersSearchViewModel
     private val searchAdapter = SearchAdapter{ click -> doClick(click)}
-    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
         supportActionBar?.title = getString(R.string.users)
 
-        usersSearchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UsersSearchViewModel::class.java]
+        usersSearchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UsersSearchViewModel::class.java)
 
+        //listUsers()
         showRecyclerView()
+        searchViewQuery()
 
-        listUsers()
-
-        loadAndError()
+        if (savedInstanceState != null) {
+            usersSearchViewModel.getSearchList(searchView.query.toString()).observe(this@UsersActivity, {
+                Log.d("HHHHHH", "GET DATA savedInstanceState $it")
+                searchAdapter.setDataSearchView(ArrayList(it))
+            })
+        }
     }
 
     private fun showRecyclerView() {
@@ -63,7 +65,11 @@ class UsersActivity : AppCompatActivity() {
                 textView_Message.visibility = if (it) View.VISIBLE else View.GONE
 
                 if (it) {
-                    Toast.makeText(this@UsersActivity, getString(R.string.errorCode), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@UsersActivity,
+                        getString(R.string.errorCode),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })
@@ -80,13 +86,13 @@ class UsersActivity : AppCompatActivity() {
         })
     }
 
-    private fun listUsers() {
-        usersSearchViewModel.listUser().observe(this, {
-            recyclerView_User.visibility = View.VISIBLE
-            searchAdapter.setDataSearchView(ArrayList(it))
-
-        })
-    }
+//    private fun listUsers() {
+//        usersSearchViewModel.listUser().observe(this, {
+//            recyclerView_User.visibility = View.VISIBLE
+//            searchAdapter.setDataSearchView(ArrayList(it))
+//
+//        })
+//    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -94,42 +100,35 @@ class UsersActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.users)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflate = menuInflater
-        inflate.inflate(R.menu.option_menu, menu)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = menu.findItem(R.id.searchView).actionView as SearchView
+    private fun searchViewQuery() {
+        searchView.queryHint = resources.getString(R.string.search_all_users)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.d("HHHHHH", "GET QUERY ===> $query")
 
-        searchView?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView?.queryHint = resources.getString(R.string.search_all_users)
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
-            override fun onQueryTextChange(query: String): Boolean {
-                if (query != "") {
-                    searchListUsersView(query)
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isBlank()) {
+                    Toast.makeText(this@UsersActivity, "kosong", Toast.LENGTH_SHORT).show()
+                    Log.d("HAHAH", " Search -> anjayy kosong")
+                    recyclerView_User.visibility = View.GONE
+                } else {
+                    usersSearchViewModel.getSearchList(newText).observe(this@UsersActivity, {
+                        searchAdapter.setDataSearchView(ArrayList(it))
+                        Toast.makeText(this@UsersActivity, "ada cuy", Toast.LENGTH_SHORT).show()
+                        Log.d("HAHAH", " Search -> $it")
+                    })
                 }
                 return false
             }
+
         })
-        return true
     }
 
     private fun searchListUsersView(newText: String) {
-        Handler(Looper.getMainLooper()).removeCallbacksAndMessages(null)
-        Handler(Looper.getMainLooper()).postDelayed({
-            usersSearchViewModel.getSearchList(newText).observe(this@UsersActivity, {
-                if (it.isEmpty()) {
-                    textView_Message.visibility = View.VISIBLE
-                    progress_bar.visibility = View.GONE
-                } else {
-                    recyclerView_User.visibility = View.VISIBLE
-                    searchAdapter.setDataSearchView(ArrayList(it))
-                }
-            })
-        }, 300)
+
     }
 }

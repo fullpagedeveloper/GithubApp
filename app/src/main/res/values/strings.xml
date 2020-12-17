@@ -9,6 +9,12 @@
     <string name="detail_user">Detail User</string>
     <string name="error">Opppsss… Please check your network !!!</string>
     <string name="errorCode">Opppsss ... seems like it\'s a problem, please try again ..</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="dummy">56995</string>
+    <string name="dummyname">Google, Inc.</string>
+    <string name="dummyname2">New Delhi, India</string>
+    <string name="dummyname3">Your name</string>
 </resources>
 
 

@@ -17,7 +17,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/item_search_user_image_profile"
         android:textColor="@color/colorGray"
-        android:textSize="16sp" tools:text="Your name " android:fontFamily="sans-serif-black"/>
+        android:textSize="16sp"
+        tools:text="@string/dummyname3"
+        android:fontFamily="sans-serif-black"/>
 
     <ImageView
         android:id="@+id/item_search_user_image_profile"

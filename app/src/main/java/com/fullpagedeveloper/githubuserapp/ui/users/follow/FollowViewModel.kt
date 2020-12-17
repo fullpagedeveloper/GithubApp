@@ -8,7 +8,6 @@ import com.fullpagedeveloper.githubuserapp.data.model.Follow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 class FollowViewModel: ViewModel() {
 
@@ -52,15 +51,20 @@ class FollowViewModel: ViewModel() {
                 call: Call<ArrayList<Follow>>,
                 response: Response<ArrayList<Follow>>
             ) {
-                if (response.isSuccessful) {
-                    follow.value = response.body()
-                    loading.value = false
-                    error.value = false
-                } else {
-                    if (response.code() in 400..511){
+                try {
+                    if (response.isSuccessful) {
+                        follow.value = response.body()
                         loading.value = false
-                        error.value = true
+                        error.value = false
+                    } else {
+                        if (response.code() in 400..511){
+                            loading.value = false
+                            error.value = true
+                        }
                     }
+
+                } catch (e: Exception){
+                    e.printStackTrace()
                 }
             }
 

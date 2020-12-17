@@ -61,8 +61,6 @@ class DetailUsersFragment : Fragment() {
 
         dataDetail(users.toString(), view)
         loadAndError()
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
