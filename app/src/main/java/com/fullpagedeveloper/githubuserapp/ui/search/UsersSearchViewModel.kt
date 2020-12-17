@@ -20,10 +20,12 @@ class UsersSearchViewModel: ViewModel() {
     private val repositories = "repositories"
     private val order = "asc"
 
+    val isi : LiveData<List<Item>> get() = _searchListUsers
+
     val error = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun getSearchList(username: String): LiveData<List<Item>> {
+    fun getSearchList(username: String) {
         loading.value = true
         serviceGenerator.getApiRequestSearch(AUTHKEY, username,repositories, order).enqueue(
             object : Callback<User> {
@@ -51,7 +53,11 @@ class UsersSearchViewModel: ViewModel() {
                 }
 
             })
-        return _searchListUsers
+//        return _searchListUsers
+    }
+
+    fun respSearchList(): LiveData<List<Item>>{
+        return  _searchListUsers
     }
 
 

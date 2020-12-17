@@ -33,12 +33,23 @@ class UsersActivity : AppCompatActivity() {
         showRecyclerView()
         searchViewQuery()
 
-        if (savedInstanceState != null) {
-            usersSearchViewModel.getSearchList(searchView.query.toString()).observe(this@UsersActivity, {
-                Log.d("HHHHHH", "GET DATA savedInstanceState $it")
-                searchAdapter.setDataSearchView(ArrayList(it))
-            })
-        }
+//        if (savedInstanceState != null) {
+//            usersSearchViewModel.getSearchList(searchView.query.toString()).observe(this@UsersActivity, {
+//                Log.d("HHHHHH", "GET DATA savedInstanceState $it")
+//                searchAdapter.setDataSearchView(ArrayList(it))
+//            })
+//        }
+
+//        usersSearchViewModel.respSearchList().observe(this@UsersActivity, {
+//            Log.i("HAHAH", "queyy ->:11 ")
+//            searchAdapter.setDataSearchView(ArrayList(it))
+//            recyclerView_User.visibility = View.VISIBLE
+//        })
+         usersSearchViewModel.isi.observe(this, {
+             Log.i("HAHAH", "queyy ->:11 ")
+             searchAdapter.setDataSearchView(ArrayList(it))
+             recyclerView_User.visibility = View.VISIBLE
+         })
     }
 
     private fun showRecyclerView() {
@@ -95,9 +106,12 @@ class UsersActivity : AppCompatActivity() {
 //    }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        supportFragmentManager.popBackStack()
-        supportActionBar?.title = getString(R.string.users)
+        if (supportFragmentManager.backStackEntryCount < 0) {
+            supportFragmentManager.popBackStack()
+            supportActionBar?.title = getString(R.string.users)
+        } else {
+            super.onBackPressed()
+        }
     }
 
 
@@ -116,11 +130,7 @@ class UsersActivity : AppCompatActivity() {
                     Log.d("HAHAH", " Search -> anjayy kosong")
                     recyclerView_User.visibility = View.GONE
                 } else {
-                    usersSearchViewModel.getSearchList(newText).observe(this@UsersActivity, {
-                        searchAdapter.setDataSearchView(ArrayList(it))
-                        Toast.makeText(this@UsersActivity, "ada cuy", Toast.LENGTH_SHORT).show()
-                        Log.d("HAHAH", " Search -> $it")
-                    })
+                    usersSearchViewModel.getSearchList(newText)
                 }
                 return false
             }
