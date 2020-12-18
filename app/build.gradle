@@ -23,6 +23,10 @@ android {
         }
     }
 
+    aaptOptions {
+        cruncherEnabled = true
+    }
+
     androidExtensions {
         experimental = true
     }

@@ -99,7 +99,8 @@ class DetailUsersFragment : Fragment() {
     }
 
     private fun dataDetail(users: String, view: View) {
-        usersViewModel.users(users).observe(viewLifecycleOwner, {
+        usersViewModel.users(users)
+        usersViewModel._users.observe(viewLifecycleOwner, {
             view.iv_Avatar?.loadImage(
                 it.avatarUrl,
                 getProgresDrawable(view.iv_Avatar.context.applicationContext)

@@ -13,11 +13,12 @@ class DetailUsersViewModel : ViewModel() {
 
     private val users = MutableLiveData<Users>()
     private val serviceGenerator = ServiceGenerator()
+    val _users : MutableLiveData<Users> get() = users
 
     val error = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun users(username: String): MutableLiveData<Users> {
+    fun users(username: String) {
         loading.value = true
         serviceGenerator.getDetail(AUTHKEY, username).enqueue(
             object : Callback<Users> {
@@ -45,7 +46,5 @@ class DetailUsersViewModel : ViewModel() {
                 }
 
             })
-        return users
     }
-
 }
