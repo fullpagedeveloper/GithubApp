@@ -11,10 +11,11 @@
     <string name="errorCode">Opppsss ... seems like it\'s a problem, please try again ..</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
-    <string name="dummy">56995</string>
-    <string name="dummyname">Google, Inc.</string>
-    <string name="dummyname2">New Delhi, India</string>
-    <string name="dummyname3">Your name</string>
+    <string name="dummy" translatable="false">56995</string>
+    <string name="dummyname" translatable="false">Google, Inc.</string>
+    <string name="dummyname2" translatable="false">New Delhi, India</string>
+    <string name="dummyname3" translatable="false">Your name</string>
+    <string name="no_results_found">No results found for your search criteria. Try with a new one :)</string>
 </resources>
 
 

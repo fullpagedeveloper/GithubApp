@@ -1,6 +1,5 @@
 package com.fullpagedeveloper.githubuserapp.data
 import com.fullpagedeveloper.githubuserapp.data.model.Follow
-import com.fullpagedeveloper.githubuserapp.data.model.Item
 import com.fullpagedeveloper.githubuserapp.data.model.User
 import com.fullpagedeveloper.githubuserapp.data.model.Users
 import com.fullpagedeveloper.githubuserapp.data.request.ApiRequest
@@ -18,10 +17,6 @@ class ServiceGenerator {
 
     fun getApiRequestSearch(token: String, q: String, sort: String, order: String): Call<User> {
         return retrofitBuilder.getSearch(token, q, sort, order)
-    }
-
-    fun getApiRequestUsersLis(): Call<ArrayList<Item>>{
-        return retrofitBuilder.getDataListUsers()
     }
 
     fun getDetail(auth: String, username: String): Call<Users> {

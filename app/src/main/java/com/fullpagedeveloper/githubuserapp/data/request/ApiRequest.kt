@@ -4,6 +4,7 @@ import com.fullpagedeveloper.githubuserapp.data.model.Follow
 import com.fullpagedeveloper.githubuserapp.data.model.Item
 import com.fullpagedeveloper.githubuserapp.data.model.User
 import com.fullpagedeveloper.githubuserapp.data.model.Users
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
 

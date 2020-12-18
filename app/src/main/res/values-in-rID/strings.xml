@@ -12,4 +12,5 @@
     <string name="errorCode">Opppsss… sepertinya sedang gangguan, silahkan coba lagi..</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
+    <string name="no_results_found">Tidak ada hasil yang ditemukan untuk kriteria pencarian Anda. Coba dengan yang baru :)</string>
 </resources>

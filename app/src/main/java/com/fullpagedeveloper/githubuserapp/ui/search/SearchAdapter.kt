@@ -17,9 +17,13 @@ class SearchAdapter(private val doClickListener: (Item) -> Unit) : RecyclerView.
     private var itemList = ArrayList<Item>()
     private var itemsFilter: ArrayList<Item> = ArrayList()
 
-    fun setDataSearchView(items: ArrayList<Item>) {
-        itemList.clear()
+    fun addAll(items: ArrayList<Item>) {
         itemList.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun clearAll() {
+        itemList.clear()
         notifyDataSetChanged()
     }
 
