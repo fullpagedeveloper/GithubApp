@@ -1,9 +1,7 @@
 package com.fullpagedeveloper.githubuserapp.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentTransaction
@@ -31,17 +29,17 @@ class UsersActivity : AppCompatActivity() {
         showRecyclerView()
         loadAndError()
 
-//         usersSearchViewModel.searchListUsers.observe(this, {
-//             Log.i("HAHAH", "queyy ->:11 ")
-//             searchAdapter.addAll(ArrayList(it))
-//             recyclerView_User.visibility = View.VISIBLE
-//         })
+         usersSearchViewModel.searchListUsers.observe(this, {
+             searchAdapter.addAll(ArrayList(it))
+             recyclerView_User.visibility = View.VISIBLE
+         })
     }
 
     private fun showRecyclerView() {
         recyclerView_User.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
+            setHasFixedSize(true)
         }
     }
 
@@ -65,11 +63,9 @@ class UsersActivity : AppCompatActivity() {
 
         usersSearchViewModel.loading.observe(this@UsersActivity, { isLoading ->
             isLoading?.let {
-                Log.d("Tessss", "load $isLoading")
                 progress_bar.visibility = if (it) View.VISIBLE else View.GONE
 
                 if (it) {
-                    Log.d("Tessss", "load uu $it")
                     textView_Message.visibility = View.GONE
                     recyclerView_User.visibility = View.GONE
                 }
@@ -91,40 +87,25 @@ class UsersActivity : AppCompatActivity() {
         searchView.queryHint = resources.getString(R.string.search_all_users)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    searchUsers(it)
-                } ?: run {
-                    Toast.makeText(this@UsersActivity, "Enter search criteria", Toast.LENGTH_SHORT).show()
-                }
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-
-//                if (newText.isNotEmpty()) {
-//                    //usersSearchViewModel.getSearchList(newText)
-//
-//                } else {
-//                    recyclerView_User.visibility = View.GONE
-//                    showNoResults()
-//                }
+                if (newText.isBlank()) {
+                    showNoResults()
+                } else {
+                    usersSearchViewModel.getSearchList(newText)
+                }
                 return false
             }
 
         })
     }
 
-    private fun searchUsers(query: String) {
-
-    }
-
     private fun showNoResults() {
         searchAdapter.clearAll()
+        recyclerView_User.visibility = View.GONE
         textView_Message.visibility = View.VISIBLE
         textView_Message.text = getString(R.string.no_results_found)
-    }
-
-    private fun searchListUsersView(newText: String) {
-
     }
 }

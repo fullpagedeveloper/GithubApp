@@ -15,9 +15,9 @@ import kotlin.collections.ArrayList
 
 class SearchAdapter(private val doClickListener: (Item) -> Unit) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>() {
     private var itemList = ArrayList<Item>()
-    private var itemsFilter: ArrayList<Item> = ArrayList()
 
     fun addAll(items: ArrayList<Item>) {
+        itemList.clear()
         itemList.addAll(items)
         notifyDataSetChanged()
     }

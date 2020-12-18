@@ -42,14 +42,26 @@ class FollowFragment : Fragment() {
 
         followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[FollowViewModel::class.java]
 
+        showRecyclerView(view)
+        loadAndError(view)
+
+        followViewModel._follow.observe(viewLifecycleOwner, {
+            followAdapter.setDataFollow(it)
+        })
+
+        followViewModel._follow.observe(viewLifecycleOwner, {
+            followAdapter.setDataFollow(it)
+        })
+    }
+
+    private fun showRecyclerView(view: View) {
         recyclerView_Follow.apply {
             layoutManager = LinearLayoutManager(view.context)
             adapter = followAdapter
+            setHasFixedSize(true)
         }
-
-        lifeCycle()
-        loadAndError(view)
     }
+
     private fun loadAndError(view: View) {
         followViewModel.error.observe(viewLifecycleOwner, { isError ->
             isError.let {
@@ -79,28 +91,17 @@ class FollowFragment : Fragment() {
         })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        lifeCycle()
-//    }
-
-    private fun lifeCycle() {
+    override fun onResume() {
+        super.onResume()
 
         val username: String = arguments?.getString(USERNAME).toString()
         val page = arguments?.getInt(PAGE, 0) as Int
 
-
         if (page == 1) {
-            followViewModel.getFollowers(username).observe(viewLifecycleOwner, {
-                followAdapter.setDataFollow(it)
-            })
+            followViewModel.getFollowers(username)
         }
-
         if (page == 2) {
-            followViewModel.getFollowing(username).observe(viewLifecycleOwner, {
-                followAdapter.setDataFollow(it)
-            })
+            followViewModel.getFollowing(username)
         }
     }
 }

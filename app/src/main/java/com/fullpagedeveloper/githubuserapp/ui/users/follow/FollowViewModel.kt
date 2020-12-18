@@ -1,5 +1,6 @@
 package com.fullpagedeveloper.githubuserapp.ui.users.follow
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fullpagedeveloper.githubuserapp.data.Constant.Companion.AUTHKEY
@@ -16,21 +17,29 @@ class FollowViewModel: ViewModel() {
     val error = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun getFollowers(username: String): MutableLiveData<ArrayList<Follow>> {
+    val _follow: LiveData<ArrayList<Follow>> get() = follow
+
+    fun getFollowers(username: String) {
         loading.value = true
         serviceGenerator.getFollowers(AUTHKEY, username).enqueue(object : Callback<ArrayList<Follow>>{
             override fun onResponse(
                 call: Call<ArrayList<Follow>>,
                 response: Response<ArrayList<Follow>>
             ) {
-                if (response.isSuccessful) {
-                    try {
+                try {
+                    if (response.isSuccessful) {
                         follow.value = response.body()
                         loading.value = false
                         error.value = false
-                    }catch (e: Exception){
-                        e.printStackTrace()
+                    } else {
+                        if (response.code() in 400..511){
+                            loading.value = false
+                            error.value = true
+                        }
                     }
+
+                } catch (e: Exception){
+                    e.printStackTrace()
                 }
             }
 
@@ -41,10 +50,9 @@ class FollowViewModel: ViewModel() {
             }
 
         })
-        return follow
     }
 
-    fun getFollowing(username: String): MutableLiveData<ArrayList<Follow>> {
+    fun getFollowing(username: String) {
         loading.value = true
         serviceGenerator.getFollowing(AUTHKEY, username).enqueue(object : Callback<ArrayList<Follow>>{
             override fun onResponse(
@@ -75,7 +83,5 @@ class FollowViewModel: ViewModel() {
             }
 
         })
-
-        return follow
     }
 }
