@@ -73,28 +73,17 @@ class UsersActivity : AppCompatActivity() {
         })
     }
 
-
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount < 0) {
-            supportFragmentManager.popBackStack()
-            supportActionBar?.title = getString(R.string.users)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     private fun setupSearchView() {
         searchView.queryHint = resources.getString(R.string.search_all_users)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                usersSearchViewModel.getSearchList(query)
                 return false
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isBlank()) {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (searchView.query.isEmpty()) {
                     showNoResults()
-                } else {
-                    usersSearchViewModel.getSearchList(newText)
                 }
                 return false
             }
@@ -107,5 +96,14 @@ class UsersActivity : AppCompatActivity() {
         recyclerView_User.visibility = View.GONE
         textView_Message.visibility = View.VISIBLE
         textView_Message.text = getString(R.string.no_results_found)
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            super.onBackPressed()
+            supportActionBar?.title = getString(R.string.users)
+        } else {
+            supportFragmentManager.popBackStack()
+        }
     }
 }

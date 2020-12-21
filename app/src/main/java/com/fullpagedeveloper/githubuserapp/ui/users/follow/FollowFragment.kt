@@ -45,11 +45,11 @@ class FollowFragment : Fragment() {
         showRecyclerView(view)
         loadAndError(view)
 
-        followViewModel._follow.observe(viewLifecycleOwner, {
+        followViewModel.follow.observe(viewLifecycleOwner, {
             followAdapter.setDataFollow(it)
         })
 
-        followViewModel._follow.observe(viewLifecycleOwner, {
+        followViewModel.follow.observe(viewLifecycleOwner, {
             followAdapter.setDataFollow(it)
         })
     }

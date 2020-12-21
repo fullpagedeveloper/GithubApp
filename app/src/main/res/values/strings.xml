@@ -7,8 +7,8 @@
     <string name="search_all_users">Search all users</string>
     <string name="users">Users</string>
     <string name="detail_user">Detail User</string>
-    <string name="error">Opppsss… Please check your network !!!</string>
-    <string name="errorCode">Opppsss ... seems like it\'s a problem, please try again ..</string>
+    <string name="message">Opppsss…</string>
+    <string name="errorCode">Opppsss</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
     <string name="dummy" translatable="false">56995</string>

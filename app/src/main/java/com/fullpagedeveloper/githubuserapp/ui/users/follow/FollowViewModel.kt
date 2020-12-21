@@ -12,12 +12,12 @@ import retrofit2.Response
 
 class FollowViewModel: ViewModel() {
 
-    private val follow = MutableLiveData<ArrayList<Follow>>()
+    private val _follow = MutableLiveData<ArrayList<Follow>>()
     private val serviceGenerator = ServiceGenerator()
     val error = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    val _follow: LiveData<ArrayList<Follow>> get() = follow
+    val follow: LiveData<ArrayList<Follow>> get() = _follow
 
     fun getFollowers(username: String) {
         loading.value = true
@@ -28,7 +28,7 @@ class FollowViewModel: ViewModel() {
             ) {
                 try {
                     if (response.isSuccessful) {
-                        follow.value = response.body()
+                        _follow.value = response.body()
                         loading.value = false
                         error.value = false
                     } else {
@@ -61,7 +61,7 @@ class FollowViewModel: ViewModel() {
             ) {
                 try {
                     if (response.isSuccessful) {
-                        follow.value = response.body()
+                        _follow.value = response.body()
                         loading.value = false
                         error.value = false
                     } else {
